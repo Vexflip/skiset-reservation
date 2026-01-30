@@ -51,3 +51,8 @@ tsc_output.txt
 
 # Ensure .env.example is not ignored
 !.env.example
+
+# Database files
+*.db
+*.db-journal
+production.db
