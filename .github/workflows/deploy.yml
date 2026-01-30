@@ -27,32 +27,21 @@ jobs:
       - name: Prune production dependencies
         run: npm prune --production
 
-      - name: Create Restart Trigger
+      - name: Create Archive
         run: |
           mkdir -p tmp
           date > tmp/restart.txt
+          zip -r deploy.zip . -x "*.git*" ".env" ".env.example" "prisma/*.db" "prisma/*.db-journal"
 
-      - name: FTP Deploy
+      - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # Determine what to upload. We need the built artifacts and dependencies.
-          # Note: Uploading node_modules via FTP can be slow.
           local-dir: ./
+          server-dir: ${{ secrets.FTP_PATH }}/
           exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github*/**
-            **/node_modules/.bin/**
             .env
-            .env.example
-            prisma/*.db
-            prisma/*.db-journal
-            src/**
-            tsconfig.json
-            tailwind.config.ts
-            postcss.config.mjs
-            eslint.config.mjs
-            README.md
+            **/*
+            !deploy.zip
