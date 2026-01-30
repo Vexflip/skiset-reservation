@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Reservation {
+  id        String            @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  startDate DateTime
+  endDate   DateTime
+  notes     String?
+  adminNotes String? // Private notes for admins
+  status    String            @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  totalPrice Decimal          @default(0)
+  promoCodeId String?
+  promoCode   PromoCode?      @relation(fields: [promoCodeId], references: [id])
+  discountAmount Decimal      @default(0)
+  finalPrice     Decimal      @default(0)
+  items     ReservationItem[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+model ReservationItem {
+  id            String      @id @default(uuid())
+  reservationId String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  category      String // ADULT_SKI, KIDS_SKI, SNOWBOARD, HELMET
+  productName   String      @default("Unknown Product")
+  price         Decimal     @default(0)
+  image         String?
+  bootsImage    String?
+  helmetImage   String?
+  options       String?     // Comma separated e.g. "BOOTS,HELMET"
+  size          String? // e.g. "170cm", "S", "M", "42"
+  level         String? // BEGINNER, INTERMEDIATE, ADVANCED
+  quantity      Int         @default(1)
+  
+  // Personal information for this item
+  surname       String?     // Nom de famille
+  sex           String?     // Sexe (M/F)
+  age           Int?        // Âge
+  height        String?     // Taille (dropdown selection)
+  weight        String?     // Poids (dropdown selection)
+  shoeSize      String?     // Pointure (dropdown selection)
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  name          String
+  description   String
+  category      String // ADULT_SKI, KIDS_SKI, SNOWBOARD, HELMET
+  price         Decimal
+  originalPrice Decimal?
+  level         String? // BEGINNER, INTERMEDIATE, ADVANCED
+  image         String? // URL or base64 placeholder
+  titleColor    String? // Hex code e.g. #FF0000
+  equipmentType String? // SKI, SNOWBOARD, MINISKI, TOURING
+  targetGroup   String? // MAN, WOMAN, TEEN, KID
+  features      String? // JSON string or comma-separated list of features
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  bootsImage    String?
+  helmetImage   String?
+  dayPrices     String? // JSON object: {"1": 50.00, "2": 90.00, ...} for custom day pricing
+}
+
+model PromoCode {
+  id            String      @id @default(uuid())
+  code          String      @unique
+  discountType  String      @default("PERCENTAGE") // PERCENTAGE or FIXED
+  discountValue Decimal
+  maxUses       Int?        // null means unlimited
+  currentUses   Int         @default(0)
+  isActive      Boolean     @default(true)
+  expiresAt     DateTime?
+  reservations  Reservation[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

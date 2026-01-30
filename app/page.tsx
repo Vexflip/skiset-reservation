@@ -1,65 +1,151 @@
-import Image from "next/image";
+"use client"
+
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  // Option 1: Redirect direct to booking
+  // redirect('/booking/equipment')
+
+  // Option 2: Nice landing page
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen relative flex overflow-hidden">
+      {/* Left Side - Ski Slope Image (1/3) */}
+      <div
+        className="w-1/3 bg-cover bg-center relative animate-fade-in"
+        style={{
+          backgroundImage: 'url(/ski-slope-bg.jpg)',
+          animationDelay: '0.2s',
+          opacity: 0,
+          animationFillMode: 'forwards'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
+
+      {/* Right Side - Content (2/3) */}
+      <div className="w-2/3 relative flex flex-col">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-slate-800 to-slate-900 z-0 text-white overflow-hidden animate-gradient">
+          {/* Animated Abstract Shapes */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-20">
+            <div className="absolute top-[10%] left-[20%] w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-float"></div>
+            <div className="absolute bottom-[10%] right-[20%] w-96 h-96 bg-cyan-400 rounded-full blur-3xl animate-float-delayed"></div>
+            <div className="absolute top-[50%] left-[50%] w-64 h-64 bg-purple-500 rounded-full blur-3xl animate-float-slow"></div>
+          </div>
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-center items-center flex-grow text-center px-4">
+          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-6 drop-shadow-lg animate-slide-up">
+            RELIEF
+            <span className="text-blue-400">.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-blue-100 max-w-2xl mb-12 font-light">
+            SKISET from la Norma offering: Premium ski & snowboard equipment rental. Book online and save time on the slopes.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+          <Link
+            href="/booking/equipment"
+            className="group relative px-8 py-5 bg-white text-slate-900 text-xl font-bold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-blue-200 to-transparent translate-x-[-100%] group-hover:animate-shimmer"></div>
+            Start Booking
+          </Link>
         </div>
-      </main>
+
+        <footer className="relative z-10 py-6 text-center text-blue-300/50 text-sm">
+          © {new Date().getFullYear()} Skiset Reservation
+        </footer>
+      </div>
+
+      <style jsx>{`
+        @keyframes gradient {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -30px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+
+        @keyframes float-delayed {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(-40px, 30px) scale(0.9);
+          }
+          66% {
+            transform: translate(25px, -25px) scale(1.1);
+          }
+        }
+
+        @keyframes float-slow {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(-30px, -40px) scale(1.05);
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 15s ease infinite;
+        }
+
+        .animate-float {
+          animation: float 20s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 18s ease-in-out infinite;
+        }
+
+        .animate-float-slow {
+          animation: float-slow 25s ease-in-out infinite;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.8s ease-out forwards;
+        }
+
+        .animate-slide-up {
+          animation: slide-up 0.8s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }

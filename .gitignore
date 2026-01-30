@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+tsc_output.txt
+
+# IDE
+.vscode
+.idea
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Ensure .env.example is not ignored
+!.env.example
