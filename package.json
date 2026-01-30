@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "next start",
-    "postinstall": "prisma generate",
-    "deploy": "npm install && npm run build"
+    "start": "NODE_OPTIONS='--max-old-space-size=3072' node server.js",
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",

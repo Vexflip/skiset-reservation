@@ -27,11 +27,24 @@ jobs:
       - name: Prune production dependencies
         run: npm prune --production
 
+      - name: Prepare Standalone Build
+        run: |
+          # Copy standalone server files
+          cp -r .next/standalone ./deploy
+          # Copy static assets
+          cp -r .next/static ./deploy/.next/static
+          cp -r public ./deploy/public
+          # Copy Prisma files
+          mkdir -p ./deploy/node_modules/.prisma
+          cp -r node_modules/.prisma/client ./deploy/node_modules/.prisma/
+          # Create restart trigger
+          mkdir -p ./deploy/tmp
+          date > ./deploy/tmp/restart.txt
+          
       - name: Create Archive
         run: |
-          mkdir -p tmp
-          date > tmp/restart.txt
-          zip -r deploy.zip . -x "*.git*" ".env" ".env.example" "prisma/*.db" "prisma/*.db-journal"
+          cd deploy
+          zip -r ../deploy.zip . -x "*.git*"
 
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
