@@ -103,7 +103,7 @@ export default function AnalyticsDashboard() {
                                 />
                                 <YAxis tick={{ fontSize: 12 }} />
                                 <Tooltip
-                                    formatter={(value: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value)}
+                                    formatter={(value: number | undefined) => value != null ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value) : ''}
                                     labelFormatter={(label) => new Date(label).toLocaleDateString()}
                                 />
                                 <Area type="monotone" dataKey="amount" stroke="#3b82f6" fill="#eff6ff" strokeWidth={2} />

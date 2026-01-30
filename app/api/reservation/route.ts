@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
         // Verify and Apply Promo Code
         let discountAmount = 0
-        let promoCodeId = null
+        let promoCodeId: string | null = null
         let finalPrice = totalPrice
 
         // Start Transaction to ensure promo usage is counted correctly

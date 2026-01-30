@@ -151,13 +151,13 @@ export default function EquipmentPage() {
                                             }
                                         }}
                                         minDate={rentalStartDate ? new Date(rentalStartDate) : new Date()}
-                                        maxDate={rentalStartDate ? new Date(new Date(rentalStartDate).getTime() + 13 * 24 * 60 * 60 * 1000) : null}
+                                        maxDate={rentalStartDate ? new Date(new Date(rentalStartDate).getTime() + 13 * 24 * 60 * 60 * 1000) : undefined}
                                         dateFormat="dd/MM/yyyy"
                                         locale="fr"
                                         placeholderText="Sélectionner la fin"
                                         disabled={!rentalStartDate}
                                         dayClassName={(date: Date) => {
-                                            if (!rentalStartDate) return null
+                                            if (!rentalStartDate) return ""
                                             const start = new Date(rentalStartDate)
                                             start.setHours(0, 0, 0, 0)
                                             const max = new Date(start.getTime() + 13 * 24 * 60 * 60 * 1000)
@@ -165,7 +165,7 @@ export default function EquipmentPage() {
                                             if (date >= start && date <= max) {
                                                 return "bg-green-100 text-green-800 font-bold rounded-full"
                                             }
-                                            return null
+                                            return ""
                                         }}
                                         className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition outline-none cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         wrapperClassName="w-full"
