@@ -1,13 +1,13 @@
-name: Deploy to o2switch
+name: Deploy via FTP
 
 on:
   push:
     branches:
-      - main  # or master, depending on your branch name
+      - main
 
 jobs:
   web-deploy:
-    name: Deploy
+    name: Build & Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
@@ -24,18 +24,35 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Sync files
+      - name: Prune production dependencies
+        run: npm prune --production
+
+      - name: Create Restart Trigger
+        run: |
+          mkdir -p tmp
+          date > tmp/restart.txt
+
+      - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }} # e.g. /www/reservation/
+          # Determine what to upload. We need the built artifacts and dependencies.
+          # Note: Uploading node_modules via FTP can be slow.
+          local-dir: ./
           exclude: |
             **/.git*
             **/.git*/**
-            **/node_modules/**
-            **/connection.js
-            **/.env
-            **/prisma/dev.db
-            **/prisma/dev.db-journal
+            **/.github*/**
+            **/node_modules/.bin/**
+            .env
+            .env.example
+            prisma/*.db
+            prisma/*.db-journal
+            src/**
+            tsconfig.json
+            tailwind.config.ts
+            postcss.config.mjs
+            eslint.config.mjs
+            README.md
