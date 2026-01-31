@@ -14,7 +14,15 @@ export async function POST(request: Request) {
 
         const buffer = Buffer.from(await file.arrayBuffer())
         const filename = `${uuidv4()}${path.extname(file.name)}`
-        const uploadDir = path.join(process.cwd(), 'public/uploads')
+        const uploadDir = path.join(process.cwd(), 'uploads')
+
+        // Ensure directory exists
+        const { mkdir } = require('fs/promises')
+        try {
+            await mkdir(uploadDir, { recursive: true })
+        } catch (e) {
+            // Ignore if exists
+        }
 
         try {
             await writeFile(path.join(uploadDir, filename), buffer)
@@ -25,7 +33,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Failed to save file' }, { status: 500 })
         }
 
-        const fileUrl = `/uploads/${filename}`
+        const fileUrl = `/api/uploads/${filename}`
 
         return NextResponse.json({ url: fileUrl }, { status: 201 })
     } catch (error) {

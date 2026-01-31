@@ -46,6 +46,10 @@ tsc_output.txt
 .idea
 
 # uploads
+# uploads folder (dynamic)
+/uploads/
+
+# public uploads (legacy)
 /public/uploads/*
 !/public/uploads/.gitkeep
 
