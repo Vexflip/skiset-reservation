@@ -4,7 +4,10 @@ import bcrypt from 'bcryptjs'
 
 export async function POST(request: Request) {
     try {
-        const { email, password, secret } = await request.json()
+        const body = await request.json()
+        const email = body.email?.trim().toLowerCase()
+        const password = body.password
+        const secret = body.secret
 
         if (!email || !password || !secret) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })

@@ -6,7 +6,9 @@ import { cookies } from 'next/headers'
 
 export async function POST(request: Request) {
     try {
-        const { email, password } = await request.json()
+        const body = await request.json()
+        const email = body.email?.trim().toLowerCase()
+        const password = body.password
 
         if (!email || !password) {
             return NextResponse.json({ error: 'Missing credentials' }, { status: 400 })
@@ -17,12 +19,16 @@ export async function POST(request: Request) {
         })
 
         if (!admin) {
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+            return NextResponse.json({
+                error: `User not found: ${email}. Please create the admin first.`
+            }, { status: 401 })
         }
 
         const isValid = await bcrypt.compare(password, admin.passwordHash)
         if (!isValid) {
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+            return NextResponse.json({
+                error: 'Invalid password. Hash mismatch.'
+            }, { status: 401 })
         }
 
         const token = signToken({ id: admin.id, email: admin.email })
