@@ -71,6 +71,7 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
     const [notesSaving, setNotesSaving] = useState(false)
     const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' } | null>(null)
     const [confirmModal, setConfirmModal] = useState<{ show: boolean, message: string, action: () => Promise<void> | void, isDangerous?: boolean } | null>(null)
+    const [cancellationModal, setCancellationModal] = useState<{ show: boolean, reason: string } | null>(null)
 
     useEffect(() => {
         if (feedback) {
@@ -108,14 +109,21 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
     const handleStatusUpdate = (newStatus: string) => {
         if (!reservation) return
 
+        // Special handling for cancellation - show reason modal
+        if (newStatus === 'CANCELLED') {
+            setCancellationModal({ show: true, reason: '' })
+            return
+        }
+
+        // For other statuses, show normal confirm dialog
         const message = newStatus === 'CONFIRMED'
             ? 'Are you sure you want to validate this reservation?'
-            : 'Are you sure you want to cancel this reservation?'
+            : 'Are you sure you want to update this status?'
 
         setConfirmModal({
             show: true,
             message,
-            isDangerous: newStatus === 'CANCELLED',
+            isDangerous: false,
             action: async () => {
                 try {
                     setActionLoading(true)
@@ -132,8 +140,7 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
                     const updatedReservation = await res.json()
                     setReservation(updatedReservation)
                     setFeedback({
-                        message: newStatus === 'CONFIRMED' ? 'Réservation confirmée !' :
-                            newStatus === 'CANCELLED' ? 'Réservation annulée.' : 'Statut mis à jour !',
+                        message: newStatus === 'CONFIRMED' ? 'Réservation confirmée !' : 'Statut mis à jour !',
                         type: 'success'
                     })
                 } catch (e) {
@@ -145,6 +152,39 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
                 }
             }
         })
+    }
+
+    const handleCancelWithReason = async () => {
+        if (!cancellationModal || !cancellationModal.reason.trim()) {
+            setFeedback({ message: 'Veuillez fournir une raison d\'annulation', type: 'error' })
+            return
+        }
+
+        try {
+            setActionLoading(true)
+            const res = await fetch(`/api/admin/reservations/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    status: 'CANCELLED',
+                    cancellationReason: cancellationModal.reason
+                })
+            })
+
+            if (!res.ok) {
+                throw new Error('Failed to cancel reservation')
+            }
+
+            const updatedReservation = await res.json()
+            setReservation(updatedReservation)
+            setFeedback({ message: 'Réservation annulée et client notifié', type: 'success' })
+            setCancellationModal(null)
+        } catch (e) {
+            console.error(e)
+            setFeedback({ message: 'Erreur lors de l\'annulation', type: 'error' })
+        } finally {
+            setActionLoading(false)
+        }
     }
 
     const handleSaveNotes = async () => {
@@ -312,7 +352,7 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
                     {/* Admin Notes Card */}
                     <div className="bg-white shadow-md rounded-lg border border-gray-200 p-6 mb-6">
                         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-blue-600">
+                            <svg xmlns="http://www.w3.orgh/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-blue-600">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                             </svg>
                             Admin Private Notes
@@ -630,6 +670,41 @@ export default function ReservationDetailsPage({ params }: { params: Promise<{ i
                                     }`}
                             >
                                 Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Cancellation Reason Modal */}
+            {cancellationModal && cancellationModal.show && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in p-4">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-slide-up">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Annuler la réservation</h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                            Veuillez indiquer la raison de l'annulation. Cette information sera envoyée au client par email.
+                        </p>
+                        <textarea
+                            value={cancellationModal.reason}
+                            onChange={(e) => setCancellationModal({ ...cancellationModal, reason: e.target.value })}
+                            placeholder="Ex: Équipement indisponible pour les dates demandées..."
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent min-h-[120px] resize-none"
+                            autoFocus
+                        />
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                onClick={() => setCancellationModal(null)}
+                                disabled={actionLoading}
+                                className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+                            >
+                                Retour
+                            </button>
+                            <button
+                                onClick={handleCancelWithReason}
+                                disabled={actionLoading || !cancellationModal.reason.trim()}
+                                className="px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {actionLoading ? 'Annulation...' : 'Confirmer l\'annulation'}
                             </button>
                         </div>
                     </div>

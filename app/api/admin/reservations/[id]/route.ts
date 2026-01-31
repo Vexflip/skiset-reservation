@@ -64,7 +64,7 @@ export async function PATCH(
 
         const { id } = await params
         const body = await request.json()
-        const { status, adminNotes } = body
+        const { status, adminNotes, cancellationReason } = body
 
         const updateData: any = {}
 
@@ -88,13 +88,35 @@ export async function PATCH(
         const reservation = await prisma.reservation.update({
             where: { id },
             data: updateData,
-            include: { items: true }
+            include: { items: true, promoCode: true }
         })
+
+        // Send status update email if status was changed
+        if (status && reservation.email) {
+            try {
+                const { sendStatusUpdateEmail } = await import('@/lib/email')
+                // Pass cancellation reason if provided
+                const reservationWithReason = {
+                    ...reservation,
+                    cancellationReason: status === 'CANCELLED' ? cancellationReason : undefined
+                }
+                await sendStatusUpdateEmail(reservation.email, reservationWithReason)
+            } catch (emailError) {
+                console.error('Failed to send status update email:', emailError)
+                // Don't fail the request if email fails
+            }
+        }
 
         // Serialize the response
         const serializedReservation = {
             ...reservation,
             totalPrice: reservation.totalPrice ? Number(reservation.totalPrice) : 0,
+            discountAmount: reservation.discountAmount ? Number(reservation.discountAmount) : 0,
+            finalPrice: reservation.finalPrice ? Number(reservation.finalPrice) : 0,
+            promoCode: reservation.promoCode ? {
+                ...reservation.promoCode,
+                discountValue: Number(reservation.promoCode.discountValue)
+            } : null,
             items: reservation.items.map((item: any) => ({
                 ...item,
                 price: item.price ? Number(item.price) : 0,

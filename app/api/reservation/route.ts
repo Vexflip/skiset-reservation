@@ -113,6 +113,7 @@ export async function POST(request: Request) {
                 },
                 include: {
                     items: true,
+                    promoCode: true, // Include promo code details for email
                 },
             })
 

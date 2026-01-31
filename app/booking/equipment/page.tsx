@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useBooking, BookingItem } from '@/app/context/BookingContext'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import { fr } from 'date-fns/locale/fr'
@@ -106,17 +107,32 @@ export default function EquipmentPage() {
     return (
         <>
             <div className="animate-fade-in max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Your Equipment</h1>
-                <p className="text-gray-600 mb-8">Choose the best gear for your ski trip.</p>
+                <div className="flex justify-between items-start mb-8">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white mb-2">Select Your Equipment</h1>
+                        <p className="text-white/90">Choose the best gear for your ski trip.</p>
+                    </div>
+                    <nav className="flex gap-6 pt-1">
+                        <Link href="/booking/equipment" className="text-white hover:text-blue-400 font-medium transition-colors">Equipment</Link>
+                        <Link href="/booking/contact" className="text-white hover:text-blue-400 font-medium transition-colors">Contact</Link>
+                    </nav>
+                </div>
 
                 {/* Date Selection */}
-                <div className="mb-6 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative z-10">
+                <div className="mb-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative z-10">
                     <div className="flex flex-col md:flex-row gap-6 items-center">
-                        <div className="flex items-center gap-2 text-blue-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                            </svg>
-                            <span className="text-sm font-bold uppercase tracking-wider">Période de location</span>
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-blue-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                </svg>
+                                <span className="text-sm font-bold uppercase tracking-wider">Période de location</span>
+                            </div>
+                            {rentalStartDate && rentalEndDate && (
+                                <div className="text-sm text-gray-600 ml-8">
+                                    {rentalDays} {rentalDays === 1 ? 'jour' : 'jours'}
+                                </div>
+                            )}
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 flex-grow">
                             <div className="flex-1">
@@ -172,30 +188,22 @@ export default function EquipmentPage() {
                                     />
                                 </div>
                             </div>
-                            {rentalStartDate && rentalEndDate && (
-                                <div className="flex flex-col items-end">
-                                    <div className="px-4 py-2.5 bg-blue-600 text-white rounded-lg font-bold text-center min-w-[100px]">
-                                        <div className="text-2xl">{rentalDays}</div>
-                                        <div className="text-xs opacity-90">{rentalDays === 1 ? 'jour' : 'jours'}</div>
-                                    </div>
-                                    {rentalDays >= 14 && (
-                                        <div className="mt-2 px-2 py-1 bg-red-100 border border-red-200 rounded text-center max-w-[120px]">
-                                            <p className="text-[10px] text-red-700 font-bold leading-tight">
-                                                Max 14 days limit reached
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
                         </div>
+                        {rentalDays >= 14 && (
+                            <div className="px-2 py-1 bg-red-100 border border-red-200 rounded text-center max-w-[180px]">
+                                <p className="text-[10px] text-red-700 font-bold leading-tight">
+                                    Max 14 days limit reached
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Filter Bar */}
-                <div className="mb-8 space-y-6 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <div className="mb-8 space-y-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm">
                     {/* Type Filters */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <span className="text-sm font-bold text-gray-400 w-24 uppercase tracking-wider flex-shrink-0">Matériel</span>
+                        <span className="text-sm font-bold text-blue-900 w-24 uppercase tracking-wider flex-shrink-0">Matériel</span>
                         <div className="flex flex-wrap gap-2">
                             {TYPE_FILTERS.map(filter => (
                                 <button
@@ -214,14 +222,14 @@ export default function EquipmentPage() {
 
                     {/* Group Filters */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <span className="text-sm font-bold text-gray-400 w-24 uppercase tracking-wider flex-shrink-0">Profil</span>
+                        <span className="text-sm font-bold text-blue-900 w-24 uppercase tracking-wider flex-shrink-0">Profil</span>
                         <div className="flex flex-wrap gap-2">
                             {GROUP_FILTERS.map(filter => (
                                 <button
                                     key={filter.id}
                                     onClick={() => setFilterGroup(filter.id)}
                                     className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${filterGroup === filter.id
-                                        ? 'bg-blue-600 text-white shadow-md'
+                                        ? 'bg-blue-800 text-white shadow-md'
                                         : 'bg-white text-gray-600 border border-gray-200 hover:bg-blue-50 hover:text-blue-600'
                                         }`}
                                 >
@@ -463,17 +471,12 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
 
     return (
         <div
-            className={`bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] border ${cardBorderColorClass} flex flex-col h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative`}
-            style={{
-                borderColor: activeBorderColor,
-                // If titleColor exists and we hover, we override the border color.
-                // Otherwise let the CSS class handle it (border-gray-200)
-            }}
+            className="bg-white/90 backdrop-blur-md rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col h-full hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             {/* Header */}
-            <div className="p-4 border-b border-gray-50 flex justify-between items-center bg-white relative rounded-t-xl">
+            <div className="p-4 border-b border-gray-50 flex justify-between items-center bg-white/50 backdrop-blur-sm relative rounded-t-xl">
                 <div>
                     <h3
                         className={`font-extrabold text-lg flex items-center gap-2 ${!product.titleColor ? headerColorClass : ''}`}
@@ -481,113 +484,102 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
                     >
                         <span className="text-xl">❆</span> {product.name}
                     </h3>
-                    <div className="flex space-x-1 mt-2">
-                        {/* Dynamic Skill Level Circles */}
-                        {/* Legacy Fallback */}
-                        {(product.level || '').includes('BEGINNER') && !(product.level || '').includes('BEGINNER_') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                {/* Instant Custom Tooltip */}
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Beginner
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
+                    {/* Skill Level Segmented Bar */}
+                    <div className="flex gap-1 mt-2">
+                        {/* Beginner Green */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('BEGINNER_GREEN')
+                                    ? 'bg-green-500'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Beginner (Green)
                                 </div>
                             </div>
-                        )}
+                        </div>
 
-                        {/* New Levels */}
-                        {(product.level || '').includes('BEGINNER_GREEN') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Beginner (Green): First time skiing
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
-                                </div>
-                            </div>
-                        )}
-                        {(product.level || '').includes('BEGINNER_BLUE') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Beginner (Blue): Comfortable on gentle slopes
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
+                        {/* Beginner Blue / Legacy Beginner */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('BEGINNER_BLUE') || ((product.level || '').includes('BEGINNER') && !(product.level || '').includes('BEGINNER_'))
+                                    ? 'bg-blue-500'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Beginner (Blue)
                                 </div>
                             </div>
-                        )}
-                        {(product.level || '').includes('INTERMEDIATE') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Intermediate (Red): Parallel turns
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
-                                </div>
-                            </div>
-                        )}
-                        {(product.level || '').includes('ADVANCED') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Advanced (Black): Expert slopes
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
+                        </div>
+
+                        {/* Intermediate */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('INTERMEDIATE')
+                                    ? 'bg-red-500'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Intermediate (Red)
                                 </div>
                             </div>
-                        )}
-                        {(product.level || '').includes('OFF_PISTE') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-amber-600 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Hors Piste: Freeride / Powder
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
-                                </div>
-                            </div>
-                        )}
-                        {(product.level || '').includes('FREESTYLE') && (
-                            <div className="relative group">
-                                <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs shadow-sm cursor-help">
-                                    <span style={{ filter: 'brightness(0) invert(1)' }}>⛷</span>
-                                </div>
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                                    <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap shadow-xl">
-                                        Snowpark: Tricks & Jumps
-                                    </div>
-                                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-900 mx-auto"></div>
+                        </div>
+
+                        {/* Advanced */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('ADVANCED')
+                                    ? 'bg-gray-900'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Advanced (Black)
                                 </div>
                             </div>
-                        )}
+                        </div>
+
+                        {/* Off Piste */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('OFF_PISTE')
+                                    ? 'bg-amber-600'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Hors Piste
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Freestyle */}
+                        <div className="relative group flex-1">
+                            <div
+                                className={`h-2 rounded-full ${(product.level || '').includes('FREESTYLE')
+                                    ? 'bg-purple-600'
+                                    : 'bg-white border border-gray-200'
+                                    }`}
+                            ></div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50 whitespace-nowrap">
+                                <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 shadow-xl">
+                                    Snowpark
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                {/* Visual Circle (Selection Indicator) */}
-                <div
-                    className="w-6 h-6 rounded-full border-2"
-                    style={{ borderColor: product.titleColor || '#e5e7eb' }}
-                ></div>
             </div>
 
-            <div className="p-4 text-sm text-gray-500 h-20 overflow-hidden text-sm leading-relaxed">
+            <div className="p-4 text-sm text-gray-500 h-20 overflow-hidden leading-tight">
                 {product.description}
             </div>
 
@@ -595,7 +587,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
             <div className="px-4 pb-2 flex items-center justify-between">
                 <div>
                     <div className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Prix web</div>
-                    <div className="text-3xl font-black text-gray-900 tracking-tight">{totalPrice.toFixed(2)} €</div>
+                    <div className="text-2xl font-black text-gray-900 tracking-tight">{totalPrice.toFixed(2)} €</div>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -606,7 +598,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
                         </div>
                     )}
                     {discount > 0 && (
-                        <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white text-sm font-bold shadow-md transform rotate-12">
+                        <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold shadow-md transform rotate-12">
                             -{discount}%
                         </div>
                     )}
@@ -614,7 +606,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
             </div>
 
             {/* Main Content Area: Split 2 Cols */}
-            <div className="p-4 flex gap-3 flex-grow bg-white">
+            <div className="p-4 flex gap-3 flex-grow bg-white/0">
                 {/* Left: Skis */}
                 <div className="w-[40%] flex items-center justify-center rounded-lg p-2 min-h-[220px] relative">
                     {product.image ? (
@@ -630,11 +622,11 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
                 <div className="w-[60%] flex flex-col gap-2.5 justify-center">
                     {/* Boots Option */}
                     <div
-                        className={`group border-2 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all cursor-pointer select-none ${addBoots ? 'border-red-500 bg-red-50' : 'border-gray-100 hover:border-gray-200'}`}
+                        className={`group border-2 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all cursor-pointer select-none ${addBoots ? 'border-transparent bg-gray-100' : 'border-transparent hover:bg-gray-50'}`}
                         onClick={() => setAddBoots(!addBoots)}
                     >
                         <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${addBoots ? 'bg-red-500 border-red-500' : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${addBoots ? 'bg-gray-900 border-gray-900' : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                                 {addBoots && <span className="text-white text-xs font-bold">✓</span>}
                             </div>
                             {/* Render Boots Image or Emoji */}
@@ -656,11 +648,11 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
 
                     {/* Helmet Option */}
                     <div
-                        className={`group border-2 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all cursor-pointer select-none ${addHelmet ? 'border-gray-800 bg-gray-50' : 'border-gray-100 hover:border-gray-200'}`}
+                        className={`group border-2 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all cursor-pointer select-none ${addHelmet ? 'border-transparent bg-gray-100' : 'border-transparent hover:bg-gray-50'}`}
                         onClick={() => setAddHelmet(!addHelmet)}
                     >
                         <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${addHelmet ? 'bg-gray-800 border-gray-800' : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${addHelmet ? 'bg-gray-900 border-gray-900' : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                                 {addHelmet && <span className="text-white text-xs font-bold">✓</span>}
                             </div>
                             {/* Render Helmet Image or Emoji */}
@@ -685,7 +677,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
             <div className="p-4 pt-0">
                 <button
                     onClick={handleAdd}
-                    className="w-full py-4 bg-[#e02e2e] hover:bg-[#c02525] text-white font-bold rounded-lg text-sm uppercase tracking-wide shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-blue-800 hover:bg-blue-800 text-white font-bold rounded-lg text-sm uppercase tracking-wide shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
                 >
                     Ajouter ce matériel
                 </button>
