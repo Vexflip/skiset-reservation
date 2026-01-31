@@ -17,12 +17,12 @@ export async function POST(request: Request) {
         })
 
         if (!admin) {
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+            return NextResponse.json({ error: 'User not found' }, { status: 401 })
         }
 
         const isValid = await bcrypt.compare(password, admin.passwordHash)
         if (!isValid) {
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+            return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
         }
 
         const token = signToken({ id: admin.id, email: admin.email })
