@@ -26,6 +26,7 @@ interface Product {
     equipmentType: string
     targetGroup: string
     dayPrices?: string | null // JSON string for custom day pricing
+    disclaimer?: string | null
 }
 
 export default function EquipmentPage() {
@@ -630,7 +631,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
                                 {addBoots && <span className="text-white text-xs font-bold">✓</span>}
                             </div>
                             {/* Render Boots Image or Emoji */}
-                            <div className="w-20 h-20 flex items-center justify-center">
+                            <div className={`w-20 h-20 flex items-center justify-center transition-all duration-300 ${addBoots ? 'grayscale-0 opacity-100' : 'grayscale opacity-60'}`}>
                                 {product.bootsImage ? (
                                     <img src={product.bootsImage} alt="Boots" className="w-full h-full object-contain" />
                                 ) : (
@@ -656,7 +657,7 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
                                 {addHelmet && <span className="text-white text-xs font-bold">✓</span>}
                             </div>
                             {/* Render Helmet Image or Emoji */}
-                            <div className="w-20 h-20 flex items-center justify-center">
+                            <div className={`w-20 h-20 flex items-center justify-center transition-all duration-300 ${addHelmet ? 'grayscale-0 opacity-100' : 'grayscale opacity-60'}`}>
                                 {product.helmetImage ? (
                                     <img src={product.helmetImage} alt="Helmet" className="w-full h-full object-contain" />
                                 ) : (
@@ -675,6 +676,11 @@ function ProductCard({ product, onAdd, rentalDays }: { product: Product, onAdd: 
             </div>
 
             <div className="p-4 pt-0">
+                {product.disclaimer && (
+                    <p className="text-xs text-gray-400 text-center mb-2 italic">
+                        {product.disclaimer}
+                    </p>
+                )}
                 <button
                     onClick={handleAdd}
                     className="w-full py-4 bg-blue-800 hover:bg-blue-800 text-white font-bold rounded-lg text-sm uppercase tracking-wide shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"

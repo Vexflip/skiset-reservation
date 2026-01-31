@@ -83,6 +83,7 @@ model Product {
   bootsImage    String?
   helmetImage   String?
   dayPrices     String? // JSON object: {"1": 50.00, "2": 90.00, ...} for custom day pricing
+  disclaimer    String? // Text displayed below the add button
 }
 
 model PromoCode {

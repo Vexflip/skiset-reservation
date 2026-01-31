@@ -20,6 +20,7 @@ const ProductSchema = z.object({
     features: z.string().optional(),
     active: z.boolean().optional(),
     dayPrices: z.string().optional().nullable(),
+    disclaimer: z.string().optional().nullable(),
 })
 
 export async function GET(request: Request) {

@@ -19,6 +19,7 @@ interface Product {
     targetGroup: string
     active: boolean
     dayPrices?: string | null
+    disclaimer?: string | null
 }
 
 export default function ProductManagement() {
@@ -322,6 +323,17 @@ export default function ProductManagement() {
                                                     placeholder="Describe the product features and intended use..."
                                                 />
                                                 <p className="text-xs text-gray-400 mt-2 text-right">{currentProduct.description?.length || 0} characters</p>
+                                            </div>
+
+                                            <div className="col-span-2">
+                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Disclaimer (Optional)</label>
+                                                <input
+                                                    value={currentProduct.disclaimer || ''}
+                                                    onChange={e => setCurrentProduct({ ...currentProduct, disclaimer: e.target.value })}
+                                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition outline-none"
+                                                    placeholder="e.g. Valid for 3 days minimum"
+                                                />
+                                                <p className="text-xs text-gray-400 mt-1">Text displayed below the 'Add' button on booking page.</p>
                                             </div>
                                         </div>
                                     </div>
