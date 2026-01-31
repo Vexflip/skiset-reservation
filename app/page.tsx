@@ -10,9 +10,9 @@ export default function Home() {
   // Option 2: Nice landing page
   return (
     <div className="min-h-screen relative flex overflow-hidden">
-      {/* Left Side - Ski Slope Image (1/3) */}
+      {/* Left Side - Ski Slope Image (1/3) - Hidden on small screens */}
       <div
-        className="w-1/3 bg-cover bg-center relative animate-fade-in"
+        className="hidden lg:block lg:w-1/3 bg-cover bg-center relative animate-fade-in"
         style={{
           backgroundImage: 'url(/ski-slope-bg.jpg)',
           animationDelay: '0.2s',
@@ -23,8 +23,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
-      {/* Right Side - Content (2/3) */}
-      <div className="w-2/3 relative flex flex-col">
+      {/* Right Side - Content (Full width on mobile, 2/3 on desktop) */}
+      <div className="w-full lg:w-2/3 relative flex flex-col">
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-slate-800 to-slate-900 z-0 text-white overflow-hidden animate-gradient">
           {/* Animated Abstract Shapes */}
