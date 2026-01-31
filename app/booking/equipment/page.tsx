@@ -151,7 +151,7 @@ export default function EquipmentPage() {
                                         dateFormat="dd/MM/yyyy"
                                         locale="fr"
                                         placeholderText="Sélectionner le début"
-                                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition outline-none cursor-pointer"
+                                        className="w-full px-4 py-2.5 bg-white rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition outline-none cursor-pointer"
                                         wrapperClassName="w-full"
                                     />
                                 </div>
@@ -184,7 +184,7 @@ export default function EquipmentPage() {
                                             }
                                             return ""
                                         }}
-                                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition outline-none cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        className="w-full px-4 py-2.5 bg-white rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition outline-none cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
                                         wrapperClassName="w-full"
                                     />
                                 </div>
