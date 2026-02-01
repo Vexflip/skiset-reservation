@@ -53,8 +53,12 @@ export default function Home() {
           </Link>
         </div>
 
-        <footer className="relative z-10 py-6 text-center text-blue-300/50 text-sm">
-          © {new Date().getFullYear()} Skiset Reservation
+        <footer className="relative z-10 py-6 text-center text-blue-300/50 text-sm flex flex-col gap-2">
+          <span>© {new Date().getFullYear()} Skiset Reservation</span>
+          <div className="flex justify-center gap-4 text-xs">
+            <Link href="/privacy" className="hover:text-blue-200 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-blue-200 transition-colors">Terms of Service</Link>
+          </div>
         </footer>
       </div>
 

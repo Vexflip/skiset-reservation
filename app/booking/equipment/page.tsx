@@ -331,30 +331,28 @@ export default function EquipmentPage() {
                                                 )}
                                             </div>
 
-                                            <div className="flex flex-col justify-between flex-grow">
+                                            <div className="flex flex-col justify-between flex-grow min-w-0">
                                                 <div>
-                                                    <div className="font-bold text-gray-900 text-sm leading-tight line-clamp-1 mb-1">{item.productName}</div>
+                                                    <div className="flex justify-between items-start gap-2 mb-1">
+                                                        <div className="font-bold text-gray-900 text-sm leading-tight truncate" title={item.productName}>{item.productName}</div>
+                                                        <div className="font-bold text-blue-600 text-sm whitespace-nowrap">{item.price.toFixed(2)}€</div>
+                                                    </div>
 
                                                     {/* Personal Information */}
                                                     {(item.surname || item.height || item.weight || item.shoeSize) && (
-                                                        <div className="mt-2 pt-2 border-t border-gray-200">
+                                                        <div className="mt-1 pt-1 border-t border-gray-100 text-xs flex items-center gap-1 overflow-hidden">
                                                             {item.surname && (
-                                                                <div className="text-xs mb-1">
-                                                                    <span className="font-semibold text-gray-700">👤 {item.surname}</span>
-                                                                </div>
+                                                                <span className="font-bold text-gray-800 truncate min-w-0 flex-shrink" title={item.surname}>
+                                                                    {item.surname}
+                                                                </span>
                                                             )}
                                                             {(item.height || item.weight || item.shoeSize) && (
-                                                                <div className="bg-gray-100 px-2 py-1 rounded flex items-center gap-2 text-xs">
-                                                                    {item.height && (
-                                                                        <span className="font-semibold text-gray-900">📏 {item.height}cm</span>
-                                                                    )}
-                                                                    {item.weight && (
-                                                                        <span className="font-semibold text-gray-900">⚖️ {item.weight}kg</span>
-                                                                    )}
-                                                                    {item.shoeSize && (
-                                                                        <span className="font-semibold text-gray-900">👟 {item.shoeSize}</span>
-                                                                    )}
-                                                                </div>
+                                                                <span className="text-gray-500 flex items-center gap-1 whitespace-nowrap flex-shrink-0">
+                                                                    {item.surname && <span className="text-gray-300 mx-0.5">|</span>}
+                                                                    {item.height && <span>{item.height}cm</span>}
+                                                                    {item.weight && <span>{item.weight}kg</span>}
+                                                                    {item.shoeSize && <span>{item.shoeSize} EU</span>}
+                                                                </span>
                                                             )}
                                                         </div>
                                                     )}
@@ -362,18 +360,28 @@ export default function EquipmentPage() {
 
                                                 <div className="flex items-center justify-between mt-1 gap-2">
                                                     <div className="flex gap-1">
-                                                        {item.options?.includes('BOOTS') && (
-                                                            <div className="w-8 h-8 rounded bg-gray-50 border border-gray-200 flex items-center justify-center text-xs overflow-hidden" title="Boots">
-                                                                {item.bootsImage ? <img src={item.bootsImage} className="w-full h-full object-contain" alt="Boots" /> : '👢'}
-                                                            </div>
-                                                        )}
-                                                        {item.options?.includes('HELMET') && (
-                                                            <div className="w-8 h-8 rounded bg-gray-50 border border-gray-200 flex items-center justify-center text-xs overflow-hidden" title="Helmet">
-                                                                {item.helmetImage ? <img src={item.helmetImage} className="w-full h-full object-contain" alt="Helmet" /> : '⛑'}
-                                                            </div>
-                                                        )}
+                                                        {/* Boots Icon */}
+                                                        <div className={`w-8 h-8 rounded border flex items-center justify-center text-xs overflow-hidden relative ${item.options?.includes('BOOTS') ? 'bg-gray-50 border-gray-200' : 'bg-gray-100 border-gray-200 opacity-50 grayscale'}`} title={item.options?.includes('BOOTS') ? "Boots Included" : "No Boots"}>
+                                                            {item.bootsImage ? <img src={item.bootsImage} className="w-full h-full object-contain" alt="Boots" /> : '👢'}
+                                                            {!item.options?.includes('BOOTS') && (
+                                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                                    <div className="w-full h-0.5 bg-red-500 transform rotate-45 absolute"></div>
+                                                                    <div className="w-full h-0.5 bg-red-500 transform -rotate-45 absolute"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Helmet Icon */}
+                                                        <div className={`w-8 h-8 rounded border flex items-center justify-center text-xs overflow-hidden relative ${item.options?.includes('HELMET') ? 'bg-gray-50 border-gray-200' : 'bg-gray-100 border-gray-200 opacity-50 grayscale'}`} title={item.options?.includes('HELMET') ? "Helmet Included" : "No Helmet"}>
+                                                            {item.helmetImage ? <img src={item.helmetImage} className="w-full h-full object-contain" alt="Helmet" /> : '⛑'}
+                                                            {!item.options?.includes('HELMET') && (
+                                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                                    <div className="w-full h-0.5 bg-red-500 transform rotate-45 absolute"></div>
+                                                                    <div className="w-full h-0.5 bg-red-500 transform -rotate-45 absolute"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="font-bold text-blue-600">{item.price.toFixed(2)}€</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -773,13 +781,14 @@ function PersonalInfoModal({
                         {/* Age */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Âge
+                                Âge <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="number"
                                 name="age"
                                 value={formData.age}
                                 onChange={handleChange}
+                                required
                                 min="1"
                                 max="120"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -790,17 +799,18 @@ function PersonalInfoModal({
                         {/* Height */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Taille (cm)
+                                Taille (cm) <span className="text-red-500">*</span>
                             </label>
                             <select
                                 name="height"
                                 value={formData.height}
                                 onChange={handleChange}
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
                                 <option value="">Sélectionner...</option>
-                                {Array.from({ length: 121 }, (_, i) => i + 100).map(height => (
-                                    <option key={height} value={height.toString()}>{height} cm</option>
+                                {Array.from({ length: 121 }, (_, i) => 100 + i).map(h => (
+                                    <option key={h} value={h}>{h} cm</option>
                                 ))}
                             </select>
                         </div>
@@ -808,30 +818,32 @@ function PersonalInfoModal({
                         {/* Weight */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Poids (kg)
+                                Poids (kg) <span className="text-red-500">*</span>
                             </label>
                             <select
                                 name="weight"
                                 value={formData.weight}
                                 onChange={handleChange}
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
                                 <option value="">Sélectionner...</option>
-                                {Array.from({ length: 131 }, (_, i) => i + 20).map(weight => (
-                                    <option key={weight} value={weight.toString()}>{weight} kg</option>
+                                {Array.from({ length: 131 }, (_, i) => 20 + i).map(w => (
+                                    <option key={w} value={w}>{w} kg</option>
                                 ))}
                             </select>
                         </div>
 
                         {/* Shoe Size */}
-                        <div className="md:col-span-2">
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Pointure
+                                Pointure (EU) <span className="text-red-500">*</span>
                             </label>
                             <select
                                 name="shoeSize"
                                 value={formData.shoeSize}
                                 onChange={handleChange}
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
                                 <option value="">Sélectionner...</option>
@@ -883,8 +895,8 @@ function PersonalInfoModal({
                             Confirmer
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
+                </form >
+            </div >
+        </div >
     )
 }

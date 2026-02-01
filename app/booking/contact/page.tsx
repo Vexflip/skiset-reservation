@@ -115,7 +115,7 @@ export default function ContactPage() {
         }
     }
 
-    const handleChange = (field: string, value: string) => {
+    const handleChange = (field: string, value: any) => {
         setContactDetails({ ...contactDetails, [field]: value })
     }
 
@@ -221,7 +221,7 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             required
@@ -231,7 +231,7 @@ export default function ContactPage() {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             required
@@ -243,7 +243,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
                     <input
                         type="email"
                         required
@@ -254,7 +254,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number <span className="text-red-500">*</span></label>
                     <input
                         type="tel"
                         required
@@ -276,6 +276,26 @@ export default function ContactPage() {
                         onChange={(e) => handleChange('notes', e.target.value)}
                         placeholder="Any special requests?"
                     />
+                </div>
+
+                <div className="flex items-start gap-3 pt-6 pb-2">
+                    <div className="flex items-center h-5">
+                        <input
+                            id="terms"
+                            name="terms"
+                            type="checkbox"
+                            required
+                            checked={contactDetails.termsAccepted}
+                            onChange={(e) => handleChange('termsAccepted', e.target.checked)}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div className="text-sm">
+                        <label htmlFor="terms" className="font-medium text-gray-700">
+                            I agree to the <a href="/terms" target="_blank" className="text-blue-600 hover:text-blue-500 underline">Terms of Service</a> and <a href="/privacy" target="_blank" className="text-blue-600 hover:text-blue-500 underline">Privacy Policy</a>
+                        </label>
+                        <p className="text-gray-500">You must accept our terms to proceed with the reservation.</p>
+                    </div>
                 </div>
 
                 <div className="pt-4 flex items-center justify-between">

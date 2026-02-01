@@ -25,8 +25,12 @@ export default function BookingLayout({
                 <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
                     {children}
                 </main>
-                <footer className="bg-transparent py-6 text-center text-white/70 text-sm">
-                    © {new Date().getFullYear()} Skiset Reservation. All rights reserved.
+                <footer className="bg-transparent py-6 text-center text-white/70 text-sm flex flex-col gap-2">
+                    <span>© {new Date().getFullYear()} Skiset Reservation. All rights reserved.</span>
+                    <div className="flex justify-center gap-4 text-xs">
+                        <Link href="/privacy" className="hover:text-blue-200 transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="hover:text-blue-200 transition-colors">Terms of Service</Link>
+                    </div>
                 </footer>
             </div>
         </BookingProvider>

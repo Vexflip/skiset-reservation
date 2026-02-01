@@ -46,6 +46,7 @@ interface BookingState {
         email: string
         phone: string
         notes: string
+        termsAccepted: boolean
     }
     setContactDetails: (details: any) => void
     resetBooking: () => void
@@ -67,6 +68,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
         email: '',
         phone: '',
         notes: '',
+        termsAccepted: false,
     })
 
     // Load from localStorage on mount or set defaults
@@ -191,6 +193,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
             email: '',
             phone: '',
             notes: '',
+            termsAccepted: false,
         })
         localStorage.removeItem('skiset_booking')
     }, [])
