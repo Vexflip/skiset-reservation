@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default function Home() {
@@ -36,17 +37,30 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex flex-col justify-center items-center flex-grow text-center px-4">
-          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-6 drop-shadow-lg animate-slide-up">
+          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-2 drop-shadow-lg animate-slide-up">
             RELIEF
             <span className="text-blue-400">.</span>
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mb-12 font-light">
-            SKISET from la Norma offering: Premium ski & snowboard equipment rental. Book online and save time on the slopes.
+
+          <div className="flex flex-col items-center justify-center gap-2 mb-12 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <span className="text-lg text-white font-bold">x</span>
+            <div className="bg-white px-3 py-1.5 rounded-lg shadow-lg transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
+              <Image
+                src="/skiset_logo.webp"
+                alt="Skiset"
+                width={120}
+                height={40}
+                className="h-8 md:h-12 w-auto object-contain"
+              />
+            </div>
+          </div>
+          <p className="text-xl text-blue-100 max-w-2xl mb-6 font-light">
+            Relief x SKISET from <span className="font-bold text-white">La Norma</span> offering: Premium ski & snowboard equipment rental. Book online and save time on the slopes.
           </p>
 
           <Link
             href="/booking/equipment"
-            className="group relative px-8 py-5 bg-white text-slate-900 text-xl font-bold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+            className="group relative px-6 py-3 bg-white text-slate-900 text-lg font-bold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
           >
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-blue-200 to-transparent translate-x-[-100%] group-hover:animate-shimmer"></div>
             Start Booking

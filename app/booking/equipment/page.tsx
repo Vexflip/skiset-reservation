@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { fr } from 'date-fns/locale/fr'
 registerLocale('fr', fr)
 import { calculateRentalPrice } from '@/lib/pricing'
+import BrandLogo from '@/app/components/BrandLogo'
 
 interface Product {
     id: string
@@ -110,12 +111,16 @@ export default function EquipmentPage() {
             <div className="animate-fade-in max-w-7xl mx-auto">
                 <div className="flex justify-between items-start mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-white mb-2">Select Your Equipment</h1>
-                        <p className="text-white/90">Choose the best gear for your ski trip.</p>
+                        <BrandLogo size="lg" />
+                        <div className="mt-4 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+                            <h1 className="text-xl font-bold text-white">Select Your Equipment</h1>
+                            <p className="text-sm text-white/80">Choose the best gear for your ski trip.</p>
+                        </div>
                     </div>
-                    <nav className="flex gap-6 pt-1">
-                        <Link href="/booking/equipment" className="text-white hover:text-blue-400 font-medium transition-colors">Equipment</Link>
-                        <Link href="/booking/contact" className="text-white hover:text-blue-400 font-medium transition-colors">Contact</Link>
+                    <nav className="flex flex-col md:flex-row gap-2 md:gap-6 pt-1 items-end md:items-center">
+                        <Link href="/" className="text-white hover:text-blue-400 font-medium transition-colors text-lg">Home</Link>
+                        <Link href="/booking/equipment" className="text-white hover:text-blue-400 font-medium transition-colors text-lg">Equipment</Link>
+                        <Link href="/booking/contact" className="text-white hover:text-blue-400 font-medium transition-colors text-lg">Contact</Link>
                     </nav>
                 </div>
 

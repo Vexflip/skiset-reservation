@@ -29,6 +29,7 @@ export default function ProductManagement() {
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({})
     const [uploading, setUploading] = useState(false)
     const [showDayPricing, setShowDayPricing] = useState(false)
+    const [showSuccess, setShowSuccess] = useState(false)
 
     const fetchProducts = async () => {
         setLoading(true)
@@ -64,6 +65,8 @@ export default function ProductManagement() {
                 setIsEditing(false)
                 setCurrentProduct({})
                 fetchProducts()
+                setShowSuccess(true)
+                setTimeout(() => setShowSuccess(false), 3000)
             } else {
                 alert('Failed to save product')
             }
@@ -191,7 +194,17 @@ export default function ProductManagement() {
                                     <span className="text-gray-300 text-4xl">⛷</span>
                                 )}
                                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded-md shadow-sm uppercase tracking-wider text-gray-500">
-                                    {product.category}
+                                    {(() => {
+                                        const typeMap: Record<string, string> = { 'SKI': 'Ski', 'SNOWBOARD': 'Snowboard', 'MINISKI': 'Mini', 'TOURING': 'Touring' }
+                                        const groupMap: Record<string, string> = { 'MAN': 'Man', 'WOMAN': 'Women', 'TEEN': 'Teen', 'KID': 'Kid' }
+                                        const type = typeMap[product.equipmentType || '']
+                                        const group = groupMap[product.targetGroup || '']
+
+                                        if (type || group) {
+                                            return `${type || ''} ${group || ''}`.trim()
+                                        }
+                                        return product.category
+                                    })()}
                                 </div>
                             </div>
 
@@ -538,6 +551,12 @@ export default function ProductManagement() {
                 )
             }
 
+            {showSuccess && (
+                <div className="fixed bottom-8 right-8 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 animate-fade-in-up z-50">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <span className="font-bold">Product saved successfully!</span>
+                </div>
+            )}
         </>
     )
 }
